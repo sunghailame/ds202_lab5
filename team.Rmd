@@ -13,10 +13,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(dplyr)
+#1
 df = read.table('diabetes.txt', header = TRUE)
+#2
 mutate_all(df, funs(na_if(.,"")))
 df <- droplevels(df)
+#3
 diabetes_reduced = select(df, -c("id", "bp.2s", "bp.2d"))
-
+#4
+diabetes_reduced[-c(index.na=apply(is.na(diabetes_reduced), 1, any))] ## identify rows with missing value.
+diabetes_clean <- na.omit(diabetes_reduced)
+#5
+which(is.na(diabetes_clean))
 ```
 
