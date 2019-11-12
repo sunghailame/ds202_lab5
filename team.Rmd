@@ -11,6 +11,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Processing the data
 
+1. Read the data into R (you can use the function read.table('diabetes.txt',header=TRUE). Provide a snapshot of the data.
+
+2. Replace the missing values in the variable frame, indicated by an empty string ‘’, by ‘NA’. Also, use function droplevels() to remove empty categorical value ‘’ from frame.
+
+3. Drop id, bp.2s, and bp.2d from our dataset. Call this dataset diabetes_reduced.
+
+4. Using diabetes_reduced, drop any rows having any missing values. Call this new dataset diabetes_clean. For the remaining questions, use this diabetes_clean dataset. Your clean dataset should have 366 rows and 16 columns. To identify the row indices that have a missing value you can use this code:
+
+index.na=apply(is.na(diabetes_reduced), 1, any) ## identify rows with missing value.
+You’ll need to write additional code to remove these rows.
+
+5. How can we check Step 4 was done correctly?
+
 ```{r}
 library(dplyr)
 #1
@@ -27,3 +40,67 @@ diabetes_clean <- na.omit(diabetes_reduced)
 which(is.na(diabetes_clean))
 ```
 
+## Exploring and transforming data
+
+6. We see that glyhb is highly right skewed. How can we remedy this? What are some potential downsides to our approach? (throwback to Lecture 7 and fbi dataset).
+
+7. Based on your answer to (6), create a new variable called glyhb_star that is no longer right-skewed. Plot a histogram of glyhb_star to verify that the variable is symmetric. From now on use this glyhb_star variable.
+
+8. Let’s explore some summary statistics before jumping into visualizations. As mentioned before, our main variable of interest is glyhb_star, which is transformed version of glyhb. Create some tables of summary statistics of glyhb_star grouped by variables you are interested in and may help illuminate which variables are associated with diabetes. Describe your findings. For example:
+
+```{r}
+library(glyhb)
+diabetes_clean %>% group_by(frame) %>% summarise(mean.glyhb = mean(glyhb_star))
+```
+
+Note: Your glyhb_star might have different values than mine and that’s ok.
+
+```{r}
+
+```
+
+## Visualizations
+
+10. The following table is difficult to unpack. Create a plot to visualize the information. (Hint: look at lec12_script_updated.R and recall what we did for the starwars dataset.)
+
+```{r}
+diabetes_clean %>% group_by(frame,location) %>% summarise (mean.glyhb_star= mean(glyhb_star))
+```
+
+11. Our main variable of interest is glyhb_star. We want to understand its relationship with ratio, bp.1s, age, gender, hip and weight. Further explore how these variables interact and visualize your findings.
+
+12. Write code to improve this plot so that we can see the distinct patterns for weight and waist across different frame and avoid overplotting. Propose two different plots.
+
+```{r}
+ggplot(diabetes_clean,aes(y=hip,x=waist,alpha=0.5)) + geom_point() + facet_wrap(~frame) 
+```
+
+## Messy data
+
+13. gather and spread may seem slightly unnatural to use at first, but they are very powerful functions that can transform data into the right format. Explain in your own words what the gather and spread functions do.
+
+14. Are gather and spread exact complements of each other? Explain.
+
+## Regression models
+
+15. We fit the following linear regression model:
+
+```{r}
+fit = lm(glyhb_star ~stab.glu + age + waist + ratio+ factor(frame),data=diabetes_clean)
+ summary(fit)
+```
+
+What insights can be obtain from this model? Explain clearly and make note of the F-statistic and adjusted R-squared. Do the results from our exploratory analysis suggest a linear model is the right approach here? You may reference plots and summary statistics from previous steps.
+
+16. Interpret the estimated regression coefficient for each predictor in fit, regardless of whether or not the predictor is significant.
+
+17. We can see the estimated fitted values (Y^) from our model using the following code fit$fitted.values. These estimated fitted values are estimates of what true value? Based on the fit model, calculate the value of Y^ when stab.glu = 90, age = 35, waist = 30, ratio = 5.1, and frame = small.
+
+18. Explain the difference between inference and prediction.
+
+19. What are advantages/disadvantages to constructing a linear regression model as opposed to a k-NN regression model?
+
+## Reflection
+
+20. On your very first HW, I asked you what you think data science is. Have your views changed?
+Discuss with your partner what you have found to be (1) most surprising about data science, (2) most challenging, and (3) most enjoyable. Write a brief paragraph addressing these points.
