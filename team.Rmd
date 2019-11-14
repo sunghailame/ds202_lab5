@@ -49,7 +49,6 @@ which(is.na(diabetes_clean))
 8. Let’s explore some summary statistics before jumping into visualizations. As mentioned before, our main variable of interest is glyhb_star, which is transformed version of glyhb. Create some tables of summary statistics of glyhb_star grouped by variables you are interested in and may help illuminate which variables are associated with diabetes. Describe your findings. For example:
 
 ```{r}
-library(glyhb)
 diabetes_clean %>% group_by(frame) %>% summarise(mean.glyhb = mean(glyhb_star))
 ```
 
