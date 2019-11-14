@@ -26,6 +26,7 @@ You’ll need to write additional code to remove these rows.
 
 ```{r}
 library(dplyr)
+library(ggplot2)
 #1
 df = read.table('diabetes.txt', header = TRUE)
 #2
@@ -42,22 +43,34 @@ which(is.na(diabetes_clean))
 
 ## Exploring and transforming data
 
-6. We see that glyhb is highly right skewed. How can we remedy this? What are some potential downsides to our approach? (throwback to Lecture 7 and fbi dataset).
+6. We see that glyhb is highly right skewed. How can we remedy this? What are some potential downsides to our approach? (throwback to Lecture 7 and fbi dataset). 
+# We can fix the skewness by doing a log transformation. Though it will make the skew not as harh but it doesnt completely go away.
 
 7. Based on your answer to (6), create a new variable called glyhb_star that is no longer right-skewed. Plot a histogram of glyhb_star to verify that the variable is symmetric. From now on use this glyhb_star variable.
+```{r}
+diabetes_clean$glyhb_star = log(diabetes_clean$glyhb)
+ggplot(diabetes_clean, aes(x=glyhb_star)) + geom_histogram() + labs(title="'glyhb_star' Variable", x="log(glyhb)")
+
+```
 
 8. Let’s explore some summary statistics before jumping into visualizations. As mentioned before, our main variable of interest is glyhb_star, which is transformed version of glyhb. Create some tables of summary statistics of glyhb_star grouped by variables you are interested in and may help illuminate which variables are associated with diabetes. Describe your findings. For example:
 
 ```{r}
-library(glyhb)
 diabetes_clean %>% group_by(frame) %>% summarise(mean.glyhb = mean(glyhb_star))
+#diabetes_clean <- na.omit(diabetes_clean$frame)
 ```
 
 Note: Your glyhb_star might have different values than mine and that’s ok.
 
 ```{r}
+library(dplyr)
+diabetes_clean %>% group_by(weight) %>% summarise(mean.glyhb = mean(glyhb_star))
+diabetes_clean %>% group_by(height) %>% summarise(mean.glyhb = mean(glyhb_star))
+diabetes_clean %>% group_by(gender) %>% summarise(mean.glyhb = mean(glyhb_star))
 
+# Weight by mean.glybh does not really have as strong of a relationship as I thought it would. Initially I thought that as weight increased mean.glybh would increase; but there are higher weights that have lower mean.glybh than lower weights. As for height by mean.glyhb it's the same, doesn't really have a strong increase as far as mean.glybh increasing as height increases. And lastly, males have a slightely higher mean.glyhb than females. 
 ```
+
 
 ## Visualizations
 
@@ -66,8 +79,20 @@ Note: Your glyhb_star might have different values than mine and that’s ok.
 ```{r}
 diabetes_clean %>% group_by(frame,location) %>% summarise (mean.glyhb_star= mean(glyhb_star))
 ```
+```{r}
+
+```
 
 11. Our main variable of interest is glyhb_star. We want to understand its relationship with ratio, bp.1s, age, gender, hip and weight. Further explore how these variables interact and visualize your findings.
+```{r}
+ggplot(diabetes_clean,aes(x=ratio, y=glyhb_star)) + geom_point() + labs(title="Ratio by log(glyhb)")
+ggplot(diabetes_clean,aes(x=bp.1s, y=glyhb_star)) + geom_point() + labs(title="Blood Pressure by log(glyhb)")
+ggplot(diabetes_clean,aes(x=age, y=glyhb_star)) + geom_point() + labs(title="Age by log(glyhb)")
+ggplot(diabetes_clean,aes(x=gender, y=glyhb_star)) + geom_boxplot() + labs(title="Gender by log(glyhb")
+ggplot(diabetes_clean,aes(x=hip, y=glyhb_star)) + geom_point() + labs(title="Hip Measurement (in) by log(glyhb)")
+ggplot(diabetes_clean,aes(x=weight, y=glyhb_star)) + geom_point() + labs(title="Weight by log(glyhb")
+```
+
 
 12. Write code to improve this plot so that we can see the distinct patterns for weight and waist across different frame and avoid overplotting. Propose two different plots.
 
@@ -104,3 +129,4 @@ What insights can be obtain from this model? Explain clearly and make note of th
 
 20. On your very first HW, I asked you what you think data science is. Have your views changed?
 Discuss with your partner what you have found to be (1) most surprising about data science, (2) most challenging, and (3) most enjoyable. Write a brief paragraph addressing these points.
+# I thought that the most surprising thing about data science for me (Elcy) was how much statistics is really involved.I think that a lot of things were difficult for me becuase I'm new to programming and I feel like a have a huge learning curve. Most enjoyable for me is when I understand how to use a function. 
