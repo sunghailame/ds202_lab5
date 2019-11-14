@@ -30,8 +30,8 @@ library(ggplot2)
 #1
 df = read.table('diabetes.txt', header = TRUE)
 #2
-mutate_all(df, funs(na_if(.,"")))
-df <- droplevels(df)
+df[which(df$frame == ''), 'frame'] = NA
+df$frame <- droplevels(df$frame)
 #3
 diabetes_reduced = select(df, -c("id", "bp.2s", "bp.2d"))
 #4
@@ -104,7 +104,11 @@ ggplot(diabetes_clean,aes(y=hip,x=waist,alpha=0.5)) + geom_point() + facet_wrap(
 
 13. gather and spread may seem slightly unnatural to use at first, but they are very powerful functions that can transform data into the right format. Explain in your own words what the gather and spread functions do.
 
+- Gather would rearrange data by moving columns into rows and spread would move rows into columns.
+
 14. Are gather and spread exact complements of each other? Explain.
+
+- Since it gather and spread does what the other function can't do, I would say it is exact complements of each other. 
 
 ## Regression models
 
