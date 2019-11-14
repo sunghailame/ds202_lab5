@@ -48,6 +48,7 @@ which(is.na(diabetes_clean))
 
 7. Based on your answer to (6), create a new variable called glyhb_star that is no longer right-skewed. Plot a histogram of glyhb_star to verify that the variable is symmetric. From now on use this glyhb_star variable.
 ```{r}
+#7
 diabetes_clean$glyhb_star = log(diabetes_clean$glyhb)
 ggplot(diabetes_clean, aes(x=glyhb_star)) + geom_histogram() + labs(title="'glyhb_star' Variable", x="log(glyhb)")
 
@@ -63,6 +64,7 @@ diabetes_clean %>% group_by(frame) %>% summarise(mean.glyhb = mean(glyhb_star))
 Note: Your glyhb_star might have different values than mine and that’s ok.
 
 ```{r}
+#8
 library(dplyr)
 diabetes_clean %>% group_by(weight) %>% summarise(mean.glyhb = mean(glyhb_star))
 diabetes_clean %>% group_by(height) %>% summarise(mean.glyhb = mean(glyhb_star))
@@ -80,11 +82,14 @@ diabetes_clean %>% group_by(gender) %>% summarise(mean.glyhb = mean(glyhb_star))
 diabetes_clean %>% group_by(frame,location) %>% summarise (mean.glyhb_star= mean(glyhb_star))
 ```
 ```{r}
-
+#10
+new = diabetes_clean %>% group_by(frame,location) %>% summarise (mean.glyhb_star= mean(glyhb_star))
+ggplot(new,aes(frame, mean.glyhb_star, group=location, color=location)) + geom_line() + labs(title="Mean log(glyhb) by frame")
 ```
 
 11. Our main variable of interest is glyhb_star. We want to understand its relationship with ratio, bp.1s, age, gender, hip and weight. Further explore how these variables interact and visualize your findings.
 ```{r}
+#11
 ggplot(diabetes_clean,aes(x=ratio, y=glyhb_star)) + geom_point() + labs(title="Ratio by log(glyhb)")
 ggplot(diabetes_clean,aes(x=bp.1s, y=glyhb_star)) + geom_point() + labs(title="Blood Pressure by log(glyhb)")
 ggplot(diabetes_clean,aes(x=age, y=glyhb_star)) + geom_point() + labs(title="Age by log(glyhb)")
@@ -94,7 +99,7 @@ ggplot(diabetes_clean,aes(x=weight, y=glyhb_star)) + geom_point() + labs(title="
 ```
 
 
-12. Write code to improve this plot so that we can see the distinct patterns for weight and waist across different frame and avoid overplotting. Propose two different plots.
+12. Write code to improve this plot so that we can see the distinct patterns for hip and waist across different frame and avoid overplotting. Propose two different plots.
 
 ```{r}
 ggplot(diabetes_clean,aes(y=hip,x=waist,alpha=0.5)) + geom_point() + facet_wrap(~frame) 
