@@ -111,6 +111,13 @@ ggplot(diabetes_clean,aes(x=weight, y=glyhb_star)) + geom_point() + labs(title="
 ggplot(diabetes_clean,aes(y=hip,x=waist,alpha=0.5)) + geom_point() + facet_wrap(~frame) 
 ```
 
+```{r}
+#12
+ggplot(diabetes_clean, aes(y=hip, x=waist, color=frame, shape=frame, alpha=0.5)) + geom_point() + facet_wrap(~frame) + labs(title="Hip vs weight by Frame")
+ggplot(diabetes_clean, aes(y=hip, x=waist, group=1)) + geom_boxplot() + facet_wrap(~frame) + labs(title="Hip vs weight by Frame")
+
+```
+
 ## Messy data
 
 13. gather and spread may seem slightly unnatural to use at first, but they are very powerful functions that can transform data into the right format. Explain in your own words what the gather and spread functions do.
@@ -135,6 +142,8 @@ What insights can be obtain from this model? Explain clearly and make note of th
 - We would say the relationship between the predictor and the response variables are good since the F-statistic value is 77.49 and it means the larger the number the better the relationship is. Since the adjusted R-squared value is on 0.557, that represents that roughly 56% of the variance in the response variables can be explained by the predictor variable. Therefore, we think the model is in the right approach here although the adjusted R-squared value can be slightly improved.
 
 16. Interpret the estimated regression coefficient for each predictor in fit, regardless of whether or not the predictor is significant.
+
+- Since the estimate slope values for stab.glu, age, waist, ratio, medium factor and small factor are close to value 0, it tells us that when the values are increased, the value for glyhb_star will increase as well but only slightly because of the low slope. Since the intercept value is 0.833 it tells us that glyhb_star will satisfy other values at 0.833.
 
 17. We can see the estimated fitted values (Y^) from our model using the following code fit$fitted.values. These estimated fitted values are estimates of what true value? Based on the fit model, calculate the value of Y^ when stab.glu = 90, age = 35, waist = 30, ratio = 5.1, and frame = small.
 
